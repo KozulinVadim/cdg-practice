@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 class User
   def born_on
     Date.new(1989, 9, 10)
@@ -14,3 +15,6 @@ user = User.new
 decorated_user = UserDecorator.new(user)
 decorated_user.birth_year
 decorated_user.born_on
+=======
+
+>>>>>>> c00f6f6b4a259b905861c47bf09065dcc9b4a019

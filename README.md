@@ -1,2 +1,1 @@
-# ruby-course
-My first Repository 
+cdg-practice
