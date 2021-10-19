@@ -4,10 +4,10 @@ def footbar
   puts "Введите 2 число:"
   b = gets.to_i
   if a == 20
-    puts b
+    return b
   elsif b == 20
-    puts a
-    else puts a+b
+    return a
+    else return a+b
   end
 end
-footbar
+puts footbar

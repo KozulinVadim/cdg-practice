@@ -1,8 +1,8 @@
 def pokemon
-  i = 0
   puts "Сколько добавить покемонов?"
   number = gets.to_i
   array = []
+  i = 0
   while i < number
     puts "Введите Имя покемона "
     pokemon_name = gets
@@ -12,6 +12,6 @@ def pokemon
     array[i] = hash # по очереди каждый хэш добавляем в массив
     i = i+1
   end
-  puts array
+  return array
 end
-pokemon
+puts pokemon
