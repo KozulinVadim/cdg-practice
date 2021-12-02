@@ -1,28 +1,51 @@
-if File.exist?('artists.txt')
-  ACTORS_LIST_PATH = 'artists.txt'
-  BUFFER = 'buffer.txt'
-def index #Выводит все строки
-  File.foreach(ACTORS_LIST_PATH) {|actor|puts actor}
+MY_FILE = "myfile.txt"
+BUFFER = "buffer.txt"
+
+def index
+  puts "Все строки файла:"
+  File.foreach(MY_FILE) { |i| puts i }
 end
 
-def update(id, name) # Заменяет строку
-    file = File.open(BUFFER, 'w')
-    File.foreach(ACTORS_LIST_PATH).with_index do |actor, index|
-      file.puts(id == index ? name : actor)
+def find(id)
+  puts "Значение введенной строки:"
+  File.foreach(MY_FILE).with_index do |i,index|
+    puts i if index == id-1
+  end
+end
+
+def where(pattern)
+  puts "Номер(а) строки с указаным Паттерном:"
+  File.foreach(MY_FILE).with_index do |i, index|
+    if i.include?(pattern)
+      puts index+1
     end
-    file.close
-    File.write(ACTORS_LIST_PATH, File.read(BUFFER))
-    File.delete(BUFFER) if File.exist?(BUFFER)
-end # Заменяет строку
-def find(line) #Выводит определенную строку
-    file = 'artists.txt'
-    lines = File.readlines(file)
-    puts lines[line]
-end #Выводит определенную строку
-
-else puts "Файл не найден"
+  
+  end
 end
+
+def update(id,text)
+  file = File.open(BUFFER, 'w')
+  File.foreach(MY_FILE).with_index do |i, index|
+    file.puts(id-1 == index ? text : i)
+  end
+  file.close
+  File.write(MY_FILE, File.read(BUFFER))
+  File.delete(BUFFER) if File.exist?(BUFFER)
+end
+
+def delete(id)
+  file = File.open(BUFFER, 'w')
+  File.foreach(MY_FILE).with_index do |i, index|
+    next if id-1 == index
+    file.puts(id-1 == index ? text : i)
+  end
+  file.close
+  File.write(MY_FILE, File.read(BUFFER))
+  File.delete(BUFFER) if File.exist?(BUFFER)
+end
+
 index
-update(0, 'Vasua Pupkin')
-puts where('Vadim' )
-find (1)
+find(3)
+where("1")
+update(2,'qq')
+delete(4)

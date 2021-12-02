@@ -1,5 +1,5 @@
 require 'rspec'
-require 'C:\Users\Vadim\Desktop\myrep\ruby-course\2lab\2lab2task.rb'
+require 'C:\Users\Vadim\Desktop\myrep\cdg-practice\2lab\2lab2task.rb'
 
 RSpec.describe 'lab2task2 ' do
   it '#pokemon' do
