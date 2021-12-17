@@ -13,15 +13,15 @@ def recording
 
     File.foreach(STUDENT) do|i|
       if i.include?(student_age)
-        File.write("specific_student.txt",i, mode: "a")
+        File.write("specific_student.txt" ,i, mode: "a")
       else
         File.write(BUFFER,i, mode: "a")
       end
     end
 
-    File.write("student.txt",File.read(BUFFER), mode: "w")
+    File.write(STUDENT, File.read(BUFFER), mode: "w")
   end
-  File.write(BUFFER,'', mode: "w")
+  File.write(BUFFER, '', mode: "w")
   puts specific_student
 end
 
