@@ -1,43 +1,43 @@
-require 'socket'
-require 'rack'
-require 'rack/utils'
+class CashMachine
 
-server = TCPServer.new('0.0.0.0', 3000)
+  def initialize
+    @balance = 100.0
 
-class App
-  def call(env)
-    req = Rack::Request.new(env)
-
-    case req.path
-    when '/hi'
-      [200, {'Content-Type' => 'text/html'}, ["Hi"]]
-    when '/bye'
-      [200, {'Content-Type' => 'text/html'}, ["Bye"]]
-    else
-      [404, {'Content-Type' => 'text/html'}, ["Not found"]]
+    if File.exist?('balance.txt')
+      f = File.open('balance.txt')
+      @balance = f.read.to_f
+      f.close
     end
   end
-end
 
-app = App.new
+  def balance
+    @balance
+  end
 
-while connection = server.accept
-  request = connection.gets
-  method, full_path = request.split(' ')
-  path = full_path.split('?')[0]
+  def keep_balance
+    f = File.open('balance.txt', 'w')
+    f.write(@balance)
+    f.close
+  end
 
-  status, headers, body = app.call({
-                                       'REQUEST_METHOD' => method,
-                                       'PATH_INFO' => path
-                                   })
+  def deposit(sum)
+    if !sum.positive?
+      'Amount must be greater than zero '
+    else
+      @balance += sum
+      "Your new balance: #{@balance}"
+    end
+  end
 
-  connection.print("HTTP/1.1 #{status}\r\n")
+  def write_off(sum)
+    if sum <= 0
+      'Amount must be greater than zero '
+    elsif sum > @balance
+      'Insufficient funds'
+    else
+      @balance -= sum
+      "Your new balance: #{@balance}"
+    end
+  end
 
-  headers.each { |key, value|  connection.print("#{key}: #{value}\r\n") }
-
-  connection.print "\r\n"
-
-  body.each { |part| connection.print(part) }
-
-  connection.close
 end
