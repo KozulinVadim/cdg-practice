@@ -1,67 +1,77 @@
-
 class CashMachine
 
-  def deposit(balance)
-    puts "Введите сумму (Больше 0)"
-    deposit = gets.to_i
-    if deposit <= 0
-      puts 'Ошибка, сумма меньше или равна 0 гривен'
-      deposit(balance)
+  def initialize
+    if File.exist?("balance.txt")
+      f = File.open("balance.txt")
+      @balance = f.read.to_f
+      f.close
+    elsif File.exist?("balance.txt") == false
+      File.open("balance.txt", "w") { File.write(100.00) }
+    end
+  end
+
+  def deposit(sum)
+    if sum <= 0
+      puts 'Amount must be greater than 0.'
     else
-      balance = deposit + balance
-      puts "Ваш новый баланс: #{balance}"
+      @balance = @balance + sum
       balance
     end
   end
 
-  def withdraw(balance)
-    puts "Введите сумму для снятия"
-    sum_withdraw = gets.to_i
-
-    if sum_withdraw > balance
-      puts "Ошибка!Сумма для снятия не может быть больше баланса, введите корректную сумму."
-      withdraw(balance)
-    elsif sum_withdraw < 0
-      puts "Ошибка!Сумма для снятия не может быть меньше 0 гривен"
-      withdraw(balance)
+  def withdraw(sum)
+    if sum <= 0
+      puts 'Amount must be greater than 0.'
+    elsif sum > @balance
+      puts 'Not enough money.'
     else
-      balance -= sum_withdraw
-      puts "Ваш новый баланс: #{balance}"
+      @balance = @balance - sum
       balance
     end
   end
 
-  def balance(balance)
-    puts "Ваш баланс: #{balance}"
+  def balance
+    puts "Your balance: #{@balance}"
   end
 
-  def init
+  def quit
+    f = File.open('balance.txt', 'w')
+    f.write(@balance)
+    f.close
+  end
 
-    if File.exists?("balance.txt") != true # проверка на наличие файла
-      file = File.new("balance.txt","w")
-      file.puts(100)
-      file.close
-    end
+  def self.init
 
-    balance = File.read('balance.txt').to_i
-    puts "Внести деньги D (deposit)\nВывести деньги W (withdraw)\nПроверит баланс B (balance)\nВыйти Q (quit)"
+    cash_machine = CashMachine.new
 
     loop do
-      operation = gets.chomp
-      check_input = ["Q","q","D","d","W","w","B","b"].include?(operation) # Проверка на корректный ввод операции
-      if check_input == false
-        puts "Ошибка!Вы ввели неверную операцию! Повторите попытку."
+      puts "Menu:
+        B - Balance
+        D - Deposit
+        W - Output
+        Q - Quit"
+
+      choose = gets.chomp
+
+      case choose.downcase
+      when 'b'
+        cash_machine.balance
+
+      when 'd'
+        puts 'Input amount of deposit:'
+        cash_machine.deposit(gets.to_f)
+
+      when 'w'
+        puts 'Input amount of withdraw:'
+        cash_machine.withdraw(gets.to_f)
+
+      when 'q'
+        cash_machine.quit
+        break
       else
-        break if operation == "Q" or operation == "q"
-        balance = deposit(balance) if operation == "D" or operation == "d"
-        balance = withdraw(balance) if operation == "W" or operation == "w"
-        balance(balance) if operation == "B" or operation == "b"
+        puts 'Wrong menu item.'
       end
     end
   end
+
 end
-
-cashmachine = CashMachine.new
-cashmachine.init
-
-# Можно было переменную balance сделать экземпляром класса, но в нашем случае нет нужды. Т.к. счет карты всегда одинаковый.
